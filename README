@@ -1,0 +1,33 @@
+
+
+step 1: Convert MARGI DNA-RNA data from GRCh38 to GRCh37 using UCSC liftover. Resulting file = MARGI_RNA_DNA_hg19.txt
+
+
+
+
+step 2: Overlap MARGI_RNA_DNA_hg19.txt with hESC DNA-PIR data (in file Esc_interCHR_removed.txt - here inter-chromosomal interactions have been removed) 
+
+perl region_overlap.pl --DNA_PIR Esc_interCHR_removed.txt --DNA_RNA MARGI_RNA_DNA_hg19.txt
+
+Produces PIR_RIR_overlap.txt - list of PIRs and the RNA-interacting DNA regions that are overlapping them
+
+
+
+
+step 3: Get a list of PIRs with and without RNA interaction using the output from step 2. Files: 'pir_with_rna' and 'pirs_without_rna' 
+
+
+
+step 4: Overlap each pir set (with and without RNA) with the feature files - in this case CTCF sites (file:merged_ENCODE_CTCF.txt).
+
+perl feature_overlap.pl --feature merged_ENCODE_CTCF.txt --query pir_with_rna
+perl feature_overlap.pl --feature merged_ENCODE_CTCF.txt --query pir_without_rna
+
+These produce output files 'merged_ENCODE_CTCF.txt_pir_with_rna_overlap.txt' and 'merged_ENCODE_CTCF.txt_pir_without_rna_overlap.txt'  
+
+
+
+step 5: merge all to create 'combined_data.txt'
+
+
+
